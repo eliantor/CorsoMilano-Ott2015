@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    app:contentPadding="@dimen/small_pad"
+    app:cardCornerRadius="8dp"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            tools:text="Title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:id="@+id/note_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            tools:text="Date"
+            android:gravity="end"
+            android:layout_marginTop="@dimen/small_pad"
+            android:layout_marginBottom="@dimen/small_pad"
+            android:id="@+id/note_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <!--<ImageButton-->
+            <!--android:visibility="gone"-->
+            <!--android:id="@+id/favourite"-->
+            <!--android:layout_gravity="end"-->
+            <!--style="?actionButtonStyle"-->
+            <!--android:src="@drawable/ic_add_24dp"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
+    </LinearLayout>
+</android.support.v7.widget.CardView>

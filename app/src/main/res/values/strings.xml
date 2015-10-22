@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Notes Manager</string>
+    <string name="add_note">Add Note</string>
+    <string name="title">Title</string>
+    <string name="content">Content</string>
+    <string name="show_note">Show Note</string>
+    <string name="display_title">Display title</string>
+</resources>
