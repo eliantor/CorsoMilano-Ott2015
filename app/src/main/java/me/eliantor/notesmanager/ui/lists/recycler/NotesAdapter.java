@@ -42,6 +42,8 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
         return mNotes.size();
     }
 
+
+
     public void addAll(List<Note> notes) {
         mNotes.clear();
         mNotes.addAll(notes);
@@ -49,7 +51,8 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
     }
 
 
-    class NotesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class NotesViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         private TextView mTitle;
         private TextView mDate;

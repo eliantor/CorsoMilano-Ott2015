@@ -45,7 +45,8 @@ public class NoteListActivity extends AppCompatActivity {
         list.setAdapter(mAdapter);
 
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        list.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Note item = mAdapter.getItem(position);

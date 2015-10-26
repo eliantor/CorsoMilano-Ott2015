@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <android.support.design.widget.AppBarLayout
@@ -16,5 +17,12 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/fragment_details" />
-</android.support.design.widget.CoordinatorLayout>
+    <fragment
+        android:id="@+id/FragmentDetails"
+        android:name="me.eliantor.notesmanager.ui.fragments.DetailsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_details" />
+
+    <!--<include layout="@layout/fragment_details" />-->
+</LinearLayout>

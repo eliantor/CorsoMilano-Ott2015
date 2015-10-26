@@ -1,7 +1,11 @@
 package me.eliantor.notesmanager.ui.lists.recycler;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,11 +13,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import me.eliantor.notesmanager.R;
+import me.eliantor.notesmanager.content.NoteContract;
 import me.eliantor.notesmanager.model.Note;
 import me.eliantor.notesmanager.model.NoteRepository;
 import me.eliantor.notesmanager.ui.CreateNoteActivity;
 import me.eliantor.notesmanager.ui.DetailsActivity;
+import me.eliantor.notesmanager.ui.fragments.DetailsActivityWithDynamicFragments;
+import me.eliantor.notesmanager.ui.fragments.DetailsActivityWithFragments;
 
 /**
  * Created by aktor on 21/10/15.
@@ -23,6 +34,34 @@ public class NoteListActivity extends AppCompatActivity implements OnNoteSelecte
     private static final int ADD_NOTE = 1;
 
     private NotesAdapter mNotesAdapter;
+    private LoaderManager.LoaderCallbacks<Cursor> callbacks = new LoaderManager.LoaderCallbacks<Cursor>() {
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            CursorLoader loader = new CursorLoader(NoteListActivity.this,
+                    NoteContract.Note.CONTENT_URI,null,null,null,null);
+            return loader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            List<Note> notes = new ArrayList<>();
+            while (data.moveToNext()){
+                Note note = convertRow(data);
+                notes.add(note);
+            }
+            mNotesAdapter.addAll(notes);
+        }
+
+        private Note convertRow(Cursor data) {
+            return new Note(data.getString(data.getColumnIndex(NoteContract.Note.TITLE)),
+                    null,false,new Date(System.currentTimeMillis()));
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +79,21 @@ public class NoteListActivity extends AppCompatActivity implements OnNoteSelecte
 
         RecyclerView list = (RecyclerView)findViewById(R.id.recycler);
 
-        LinearLayoutManager linearList  = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager linearList  =
+                new LinearLayoutManager(this,
+                        LinearLayoutManager.VERTICAL,
+                        false);
         list.setLayoutManager(linearList);
 
         int space = getResources().getDimensionPixelSize(R.dimen.small_pad);
         SpaceItemDecorator spacing = new SpaceItemDecorator(space);
         list.addItemDecoration(spacing);
+
         list.setAdapter(mNotesAdapter);
+
+        getSupportLoaderManager().initLoader(R.id.LOAD_NOTES,null,callbacks);
     }
+
 
 
     @Override
@@ -90,6 +136,6 @@ public class NoteListActivity extends AppCompatActivity implements OnNoteSelecte
 
     @Override
     public void onNoteSelected(Note note) {
-        DetailsActivity.start(this,note);
+        DetailsActivityWithDynamicFragments.start(this, note);
     }
 }

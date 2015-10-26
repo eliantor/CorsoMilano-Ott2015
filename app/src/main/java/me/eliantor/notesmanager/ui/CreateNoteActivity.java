@@ -3,6 +3,7 @@ package me.eliantor.notesmanager.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +17,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Date;
+
 import me.eliantor.notesmanager.R;
+import me.eliantor.notesmanager.model.Note;
 import me.eliantor.notesmanager.model.NoteRepository;
 import me.eliantor.notesmanager.ui.lists.adapters.NoteListActivity;
 
@@ -25,6 +29,8 @@ import me.eliantor.notesmanager.ui.lists.adapters.NoteListActivity;
  * Created by aktor on 21/10/15.
  */
 public class CreateNoteActivity extends AppCompatActivity {
+
+    public static final String EXTRA_RETURN_LENGTH="erarasfdas";
 
     private static final String TAG = "logtag";
 
@@ -51,7 +57,8 @@ public class CreateNoteActivity extends AppCompatActivity {
 //                Editable text = mTitleTextView.getText();
 //                displayNote(text.toString());
 //                createNote();
-                saveNote();
+//                saveNote();
+                persistNote();
             }
         });
 
@@ -85,10 +92,32 @@ public class CreateNoteActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_create_note) {
-            createNote();
+            //createNote();
+            persistNote();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void perisistNoteAsync(){
+        Note note = new Note(mTitleTextView.getText().toString(),
+                mContentTextView.getText().toString(),
+                false,
+                new Date(System.currentTimeMillis()));
+        SaveNoteTask task = new SaveNoteTask(this);
+        task.execute(note);
+
+    }
+    private void persistNote(){
+        Note note = new Note(mTitleTextView.getText().toString(),
+                mContentTextView.getText().toString(),
+                false,
+                new Date(System.currentTimeMillis()));
+        Uri newNoteAddress = DbAccess.saveNote(this, note);
+        Intent returnResult = new Intent();
+        returnResult.setData(newNoteAddress);
+        setResult(RESULT_OK, returnResult);
+        finish();
     }
 
 
@@ -100,8 +129,10 @@ public class CreateNoteActivity extends AppCompatActivity {
     private void saveNote(){
         String title = mTitleTextView.getText().toString();
         String content = mContentTextView.getText().toString();
-        NoteRepository.getInstance().addNote(title,content);
-        setResult(RESULT_OK);
+        NoteRepository.getInstance().addNote(title, content);
+        Intent returnValue = new Intent();
+        returnValue.putExtra(EXTRA_RETURN_LENGTH,content.length());
+        setResult(RESULT_OK,returnValue);
         finish();
     }
 
@@ -109,6 +140,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         noteTitle = title;
         mOutput.setText(noteTitle);
     }
+
 
     public static void createNote(Activity a,int request) {
         Intent intent = new Intent(a,CreateNoteActivity.class);
